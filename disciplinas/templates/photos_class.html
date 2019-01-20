@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+    {% for file in name_files %}
+
+        <img src="{{MEDIA_URL}}{{file}}" alt="">
+
+    {% endfor %}
+
+{% endblock %}

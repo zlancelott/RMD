@@ -1,0 +1,21 @@
+{% extends 'base_login.html' %}
+
+<!--Carregando plugin do bootstrap form-->
+{% load bootstrap %}
+
+{% block title %} Login {% endblock %}
+
+{% block content %}
+
+    <div>
+         <h2>Login</h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form|bootstrap }}
+            <button class="btn btn-info" type="submit" >Login</button>
+        </form>
+    </div>
+
+
+{% endblock %}

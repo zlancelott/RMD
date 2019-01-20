@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+	<h1> {{current_class.subject.name}} </h1>
+
+	{% for aula in current_class.lessons.all %}
+		<div class="formatacao-disciplina content-section col-md-5">
+			<h2><a href="{% url 'photos_class' current_class.subject.name %}"><span class="tam-livro fas fa-book-open"></span><br>Aula {{ aula.id }}</a></h2>
+		</div>
+
+	{% empty %}
+		<p> Não há aulas para serem exibidas </p>
+
+	{% endfor %}
+
+{% endblock %}

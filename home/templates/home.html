@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+
+<!-- Carregando tag para bootstrap em forms -->
+{% load crispy_forms_tags %} 
+
+{% load static %}
+
+{% block style %}
+    <!-- LIGHTBOX -->
+    <link rel="stylesheet" type="text/css" href="{% static 'lightbox2-master/src/css/lightbox.css' %}">
+
+
+    <!-- TimeLine  -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/timeline/reset.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/timeline/style.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/timeline/demo.css' %}">
+
+    <!-- Calendar -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/calendar/main.css' %}">
+
+
+    <!-- Inline Element -->
+    <link rel="stylesheet" type="text/css" href="{% static 'jquery-ui/jquery-ui/jquery-ui.min.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+
+    <!-- TimeLine -->
+
+    <section class="cd-timeline js-cd-timeline">
+        <div class="cd-timeline__container">
+            <div class="cd-timeline__block js-cd-block">
+                <div class="cd-timeline__content js-cd-content">
+
+                    <!-- Formulário para realizar numa submissão na timeline... -->
+                    <form id="formSub" method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+
+                        <h2 id="subject" class="editable-subject">Disciplina</h2>
+                        {{ submission_form.subject|as_crispy_field }}
+
+                        <h3 class="editable-topic" id="topic">Assunto<h3>
+                        {{ submission_form.topic|as_crispy_field }}
+
+                        {{ submission_form.class_date|as_crispy_field }}
+
+                        <p id="description" class="autogrow">Descrição da Aula</p>
+                        {{ submission_form.description|as_crispy_field }}
+
+                        {{ submission_form.files|as_crispy_field }}
+
+                        <input style="float:right;" type="submit" class="btn btn-primary" value="Criar">  
+                    </form>
+                    
+
+                    <!-- <a href="#0" class="cd-timeline__read-more">Read more</a> -->
+                    <span class="cd-timeline__date datepicker">Data</span>
+                </div> <!-- cd-timeline__content -->
+            </div> <!-- cd-timeline__block -->
+
+            <!-- LISTAGEM DE ARQUIVOS EM TIMELINE -->
+            {% for submission in submissions|dictsort:"submission_date" %}
+                <div class="cd-timeline__block js-cd-block">
+                    <div class="cd-timeline__content js-cd-content"  data-toggle="collapse" data-target="#{{submission.id}}">
+
+                        <h2>{{submission.subject.name}}</h2>
+                        <br>
+                        
+                        <h3> {{submission.topic}} </h3>
+
+                        <div class="collapse" id="{{submission.id}}">
+                            <p>{{ submission.description }}</p>
+
+                            {% for file in submission.files.all %}
+
+                                <a href="{{MEDIA_URL}}{{file.file_image}}" data-lightbox="roadtrip">
+                                    <img class="mt-3 ml-3 mr-3 mb-3 w-25" src="{{MEDIA_URL}}{{file.file_image}}">
+                                </a>
+                            
+                            {% endfor %}
+                        </div>
+
+                        <!-- <a href="#0" class="cd-timeline__read-more">Read more</a> -->
+                        <span class="cd-timeline__date">{{submission.submission_date}}</span>
+                    </div> <!-- cd-timeline__content -->
+                </div> <!-- cd-timeline__block -->
+            {% endfor %}
+        </div>
+    </section>
+
+
+    {% block javascript %}
+
+        <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script> 
+        
+        <!-- Slide Images -->
+        <script src="{% static 'lightbox2-master/src/js/lightbox.js' %}"></script>
+
+        <!-- TimeLine -->
+        <script src="{% static 'js/timeline/main.js' %}"></script>
+
+        <!-- In-Place -->
+        <script src="{% static 'js/node_modules/jquery-jeditable/dist/jquery.jeditable.min.js' %}"></script>
+        <script src="{% static 'js/node_modules/jquery-jeditable/dist/jquery.jeditable.autogrow.min.js' %}"></script>
+        <script src="{% static 'js/node_modules/jquery-jeditable/dist/jquery.autogrowtextarea.js' %}"></script>
+        
+        <script src="{% static 'jquery-ui/jquery-ui/jquery-ui.js' %}"></script>
+        <script src="{% static 'js/node_modules/jquery-jeditable/dist/jquery.jeditable.datepicker.min.js' %}"></script>
+
+        <!-- Código para exibir o popover e configurar a lightbox -->
+        <script type="text/javascript">
+            
+            /* Jquery in editable in-places */
+
+            $('.editable-topic').editable(function(value, settings){
+                console.log(value);
+                $('#id_topic').val(value)
+
+                return value
+            });
+
+            $('.autogrow').editable(function(value, settings){
+                console.log(value);
+                $('#id_description').val(value)
+
+                return value
+            },{
+                type: "autogrow",
+                submit: "OK",
+                cancel: 'cancel',
+                tooltip: "Clique para editar",
+                onblur: "ignore"
+            });
+            
+            $('.editable-subject').editable(function(value, settings){
+                console.log(value);
+                $('#id_subject').val(value)
+
+                return value
+            }, {
+                type: "select",
+                data: {{subjects|safe}},
+            });
+
+            $('.datepicker').editable(function(date, settings){
+                var now = new Date();   
+
+                var day = date.slice(0,2);
+                var month = "05";
+
+                var today = date.slice(-4) +"-"+(month)+"-"+(day) ;
+
+                $('#id_class_date').val(today);
+
+                return date
+            }, {
+                type: "datepicker",
+                submit: "OK",
+                datepicker: {
+                    format: "mm-dd-yy"
+                },
+                tooltip: "Clique para Editar"
+            });
+            
+            /* end in-places*/
+
+            $(function () {
+            $('[data-toggle="popover"]').popover()
+            });
+
+            lightbox.option({
+                'resizeDuration': 10,
+                'wrapAround': false
+            });
+
+
+        </script>
+
+    {% endblock %}
+
+
+{% endblock %}

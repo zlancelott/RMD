@@ -1,0 +1,1 @@
+web: gunicorn RMD.wsgi --log-file -

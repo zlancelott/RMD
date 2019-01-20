@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Bem-Vindo, {{user}}</h1>
+
+    <br>
+
+    <h4>Arquivos Submetidos</h2>
+
+    {% for lesson_file in lessons_files %}
+
+        <div class="card">
+            <h5 class="card-header">{{lesson_file.subject.name}}</h5>
+            <div class="card-body">
+                <h5 class="card-title">{{lesson_file.name}}</h5>
+                <p class="card-text">{{lesson_file.lesson.date}}</p>
+
+                <form action= "{% url 'delete_submission' lesson_file.id %}" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    <input type="submit" name=btn_rejeitar class="btn btn-danger" value="Remover">
+            
+                </form>
+            </div>
+        </div>
+
+        <br>
+
+    {% endfor %}
+
+{% endblock %}

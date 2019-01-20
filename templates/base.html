@@ -1,0 +1,100 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+	 crossorigin="anonymous">
+
+	 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/solid.css" integrity="sha384-uKQOWcYZKOuKmpYpvT0xCFAs/wE157X5Ua3H5onoRAOCNkJAMX/6QF0iXGGQV9cP" crossorigin="anonymous">
+	 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/regular.css" integrity="sha384-OEIzojYBMrmz48aIjVQj7VG38613/sxpP58OW9h5zBYC7biGFlv9tyu5kWmaAYlF" crossorigin="anonymous">
+	 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/brands.css" integrity="sha384-BCEeiNUiLzxxoeYaIu7jJqq0aVVz2O2Ig4WbWEmRQ2Dx/AAxNV1wMDBXyyrxw1Zd" crossorigin="anonymous">
+	 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.2/css/fontawesome.css" integrity="sha384-HU5rcgG/yUrsDGWsVACclYdzdCcn5yU8V/3V84zSrPDHwZEdjykadlgI6RHrxGrJ" crossorigin="anonymous">
+
+	<link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+
+	<link rel="stylesheet" type="text/css" href="{% static 'css/meu_estilo.css' %}">
+
+	{% block style %} {% endblock %}
+
+	<title> RMD - Repositório Material de Disciplinas - {% block title %} {% endblock %} </title>
+
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+		<div class="container">
+			<div class="col-md-2 col-sm-1 col-2">
+				<a class="navbar-brand mr-4" href="/">
+					<span class="fas fa-graduation-cap"></span> 
+					RMD
+				</a>
+
+			</div>
+			
+			<div class="col-md-5 col-sm-7 col-8">
+				<form class="form-inline my-2 my-lg-0">
+					<div class="col-8">
+						<input  class="form-control mr-sm-1" type="search" placeholder="Search" aria-label="Search">
+					</div>
+					<div class="col-4">
+						<button class="btn btn-light my-2 my-sm-0" type="submit">
+							<span class="fas fa-search"></span>
+						</button>
+					</div>
+				</form>
+			</div>
+
+			<div class="col-md-5 col-sm-1 col-2">
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle"
+					aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+
+				<div class="collapse navbar-collapse" id="navbarToggle">
+					<div class="navbar-nav mr-auto">
+					</div>
+					<!-- Navbar Right Side -->
+					<div class="navbar-nav">
+						{% if user.is_authenticated %}
+							{% if moderador %}
+								<a class="nav-item nav-link" href="{% url 'evaluate_submissions' %}">Avaliar Submissões</button>
+							{% endif %}
+							
+							<a class="nav-item nav-link" href="{% url 'logout' %}">Logout &ensp;
+								<span id="icone-sair" class="fas fa-sign-out-alt"></span>
+							</a>
+						{% endif %}
+	
+					</div>
+				</div>
+			</div>
+		</div>
+	</nav>
+	<br><br>
+	<div id="content" class="container" >
+		{% block content %}{% endblock %}
+	</div>
+
+	<script src="{% static 'js/main.js' %}"></script>	
+
+		<!-- Optional JavaScript -->
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+	 crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T"
+	 crossorigin="anonymous"></script>
+
+	 
+	 {% block javascript %} {% endblock %}
+</body>
+
+</html>
