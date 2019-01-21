@@ -135,8 +135,17 @@
             });
             
             $('.editable-subject').editable(function(value, settings){
-                console.log(value);
-                $('#id_subject').val(value)
+                var subjects = settings["data"];
+
+                var posicao = 0;
+
+                // Obtendo a posição da disciplina do dicionário...
+                for (subject in subjects){
+                    if (subject == value){
+                        $('#id_subject').val(posicao);
+                    }
+                    posicao ++;
+                }
 
                 return value
             }, {
@@ -145,14 +154,8 @@
             });
 
             $('.datepicker').editable(function(date, settings){
-                var now = new Date();   
 
-                var day = date.slice(0,2);
-                var month = "05";
-
-                var today = date.slice(-4) +"-"+(month)+"-"+(day) ;
-
-                $('#id_class_date').val(today);
+                $('#id_class_date').val(date);
 
                 return date
             }, {

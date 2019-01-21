@@ -75,7 +75,7 @@ def home(request):
     subjects_dict = {"": ""}
     x=1
     for subject in user_logged_in.subjects.all():
-        subjects_dict[str(x)] = subject.name
+        subjects_dict[subject.name] = subject.name
         x+=1
         
     subjects_dict["selected"] = ""

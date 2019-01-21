@@ -34,3 +34,12 @@ class UpdateSubForm(forms.Form):
     topic = forms.CharField(max_length=100)
     class_date = forms.DateField(widget=forms.widgets.DateInput(attrs={'type': 'date'}))
     description = forms.CharField(widget=forms.Textarea(attrs={'rows':5}))
+
+
+
+# class UpdateSubForm(forms.Form):
+#     ### CRIAR FORMULÁRIO ###
+#     subject = forms.ModelChoiceField(widget=forms.HiddenInput(), queryset=Subject.objects.all())
+#     topic = forms.CharField(widget=forms.HiddenInput(), max_length=100)
+#     class_date = forms.DateField(widget=forms.HiddenInput())
+#     description = forms.CharField(widget=forms.HiddenInput())
