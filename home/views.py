@@ -123,27 +123,26 @@ def evaluate_submissions(request):
     if request.method == "POST":
         form = UpdateSubForm(request.POST or None, request.FILES or None)
 
-        if form.is_valid():
-            # Se aceitar a submissão ele muda o valor do approved para True
-            # e salva o objeto
-            if request.POST['btn_aceitar']:
-                submission = get_object_or_404(Submission, id=request.POST['submission_id'])
-                # Salvando Submissão
-                submission.subject = form.cleaned_data['subject']
-                submission.submission_date = form.cleaned_data['class_date']
-                submission.description = form.cleaned_data['description']
-                submission.topic = form.cleaned_data['topic']
-                submission.uploader = user_logged_in
-                submission.approved = True
-                
-                submission.save()
+        if request.POST['btn_aceitar']:
+            submission = get_object_or_404(Submission, id=request.POST['submission_id'])
+            # Salvando Submissão
+            submission.subject = get_object_or_404(Subject, id=request.POST['submission_subject'])
+            submission.submission_date = request.POST['submission_date']
+            submission.description = request.POST['submission_description']
+            submission.topic = request.POST['submission_topic']
+            submission.uploader = user_logged_in
+            submission.approved = True
+            
+            submission.save()
 
-                return redirect('home')
+            return redirect('home')
 
-            # Se rejeitar a submissão ele deleta o arquivo
-            if request.POST['btn_rejeitar']:
-                submission.delete()
-                return redirect('home')            
+        # Se rejeitar a submissão ele deleta o arquivo
+        if request.POST['btn_rejeitar']:
+            submission.delete()
+            return redirect('home')            
+
+        print (request.POST)
 
     else: # O que vai ser mostrado ao entrar na página  
         form = UpdateSubForm()
@@ -152,7 +151,7 @@ def evaluate_submissions(request):
     subjects_dict = {"": ""}
     x=1
     for subject in Subject.objects.all():
-        subjects_dict[str(x)] = subject.name
+        subjects_dict[subject.name] = subject.name
         x+=1
         
     subjects_dict["selected"] = ""
