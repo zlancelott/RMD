@@ -14,7 +14,7 @@ class SubForm(forms.Form):
     description = forms.CharField(widget=forms.HiddenInput())
     files = forms.ImageField(widget=forms.FileInput(attrs={'id':'files','multiple':True}))
 
-    files.widget.attrs.update({'class': 'btn btn-dark button-files'})
+    files.widget.attrs.update({'class': 'form-control-files form-control-sm'})
 
 
 
