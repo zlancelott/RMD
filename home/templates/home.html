@@ -29,17 +29,19 @@
 
     <!-- TimeLine -->
 
-    <section class="cd-timeline js-cd-timeline">
+    <section class="">
         <div class="cd-timeline__container">
             <div class="cd-timeline__block js-cd-block">
                 <div class="cd-timeline__content js-cd-content">
-
                     <!-- Formulário para realizar numa submissão na timeline... -->
-                    <form id="formSub" method="POST" enctype="multipart/form-data">
+                    <form id="formSub" method="POST" enctype="multipart/form-data"
+                    onsubmit="return notifar();">
                         {% csrf_token %}
 
                         <h2 id="subject" class="editable-subject">Disciplina</h2>
                         {{ submission_form.subject|as_crispy_field }}
+
+                        <br>
 
                         <h3 class="editable-topic" id="topic">Assunto<h3>
                         {{ submission_form.topic|as_crispy_field }}
@@ -53,7 +55,11 @@
 
                         <input style="float:right;" type="submit" class="btn btn-primary" value="Criar">  
                     </form>
-                    
+
+                    {% if notify %}
+                        <p id="notify-submission" >You just submitted this form!</p>
+                    {% endif %}
+
 
                     <!-- <a href="#0" class="cd-timeline__read-more">Read more</a> -->
                     <span class="cd-timeline__date datepicker">Data</span>
@@ -92,6 +98,7 @@
 
 
     {% block javascript %}
+    
 
         <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script> 
         
@@ -109,9 +116,15 @@
         <script src="{% static 'jquery-ui/jquery-ui/jquery-ui.js' %}"></script>
         <script src="{% static 'js/node_modules/jquery-jeditable/dist/jquery.jeditable.datepicker.min.js' %}"></script>
 
+
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+
         <!-- Código para exibir o popover e configurar a lightbox -->
         <script type="text/javascript">
-            
+
+
+
             /* Jquery in editable in-places */
 
             $('.editable-topic').editable(function(value, settings){
@@ -155,10 +168,17 @@
             });
 
             $('.datepicker').editable(function(date, settings){
+                var data = date.split("/");
 
-                $('#id_class_date').val(date);
+                var dia = data[1];
+                var mes = data[0];
+                var ano = data[2];
 
-                return date
+                console.log(data);
+
+                $('#id_class_date').val(ano + "-" + mes + "-" + dia);
+
+                return dia + "/" + mes + "/" + ano
             }, {
                 type: "datepicker",
                 submit: "OK",

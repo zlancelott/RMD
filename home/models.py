@@ -1,9 +1,16 @@
 from django.db import models
+from django.core.signals import request_finished
+
 
 from django.contrib.auth.models import (
 	AbstractBaseUser, BaseUserManager, AbstractUser
 )
 
+
+def my_callback(sender, **kwargs):
+    print ("Request finished!")
+
+request_finished.connect(my_callback)
 
 # Usuário
 class User(AbstractUser):

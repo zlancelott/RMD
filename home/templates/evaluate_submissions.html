@@ -149,12 +149,18 @@
 
             $('.editable-date').editable(function(date, settings){
                 var id_submission = $(this).attr("id");
+                
+                var data = date.split("/");
 
-                console.log(date);
+                var dia = data[1];
+                var mes = data[0];
+                var ano = data[2];
 
-                $('#id_date' + id_submission).val(date);
+                console.log(data);
 
-                return date
+                $('#id_date' + id_submission).val(dia + "-" + mes + "-" + ano);
+
+                return dia + "/" + mes + "/" + ano
             }, {
                 type: "datepicker",
                 submit: "OK",

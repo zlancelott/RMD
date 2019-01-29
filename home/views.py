@@ -13,6 +13,17 @@ import json
 
 from django.views.decorators.csrf import csrf_exempt
 
+from django.db.models.signals import pre_save
+from .models import Submission
+
+
+def my_handler(sender, **kwargs):
+    global notify
+
+    notify = True
+
+
+pre_save.connect(my_handler, sender=Submission)
 
 @login_required
 def home(request):
@@ -35,6 +46,8 @@ def home(request):
         print (request.FILES)
 
         print (form.is_valid())
+
+        print (form)
 
         if form.is_valid():
             print ("Entrando...")
@@ -69,6 +82,8 @@ def home(request):
         form.fields['class_date'].label = 'Data da Aula'
         form.fields['description'].label = 'Descrição'
         form.fields['files'].label = 'Imagens da Aula'
+
+        notify = False
     
 
     # Criando dicionario com subjects para select de In-Place element #
@@ -85,6 +100,7 @@ def home(request):
         'submissions': user_logged_in.submissions.filter(approved=True), #Apenas submissões já aprovadas
         'moderador': moderador,
         'subjects': json.dumps(subjects_dict),
+        'notify': notify,
         }
 
     return render(request, 'home.html', json_data)
@@ -112,13 +128,15 @@ def check_is_moderator(user):
 @user_passes_test(check_is_moderator)
 def evaluate_submissions(request):
     user_logged_in = request.user
-    
     try:
         moderador = ModerationOfSubjects.objects.get(pk=user_logged_in.id)
         print (moderador)
     except ModerationOfSubjects.DoesNotExist:
         moderador = False
     
+    submissions = (user_logged_in.submissions.filter(subject = moderador.subject)).filter(approved=False)
+
+    print (submissions[0].submission_date)
 
     if request.method == "POST":
         form = UpdateSubForm(request.POST or None, request.FILES or None)
@@ -158,7 +176,7 @@ def evaluate_submissions(request):
 
     json_data = {
         # Submissões da discipliuna do moderador e que ainda não foram aprovadas
-        'submissions': (user_logged_in.submissions.filter(subject = moderador.subject)).filter(approved=False),
+        'submissions': submissions,
         'moderador': moderador,
         'subjects':json.dumps(subjects_dict),
         'submission_form': form,
