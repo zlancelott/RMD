@@ -100,7 +100,7 @@ def home(request):
         'submissions': user_logged_in.submissions.filter(approved=True), #Apenas submissões já aprovadas
         'moderador': moderador,
         'subjects': json.dumps(subjects_dict),
-        'notify': notify,
+        'notify': True,
         }
 
     return render(request, 'home.html', json_data)
