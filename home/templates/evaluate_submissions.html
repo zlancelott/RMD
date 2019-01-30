@@ -23,6 +23,7 @@
 
     <!-- Inline Element -->
     <link rel="stylesheet" type="text/css" href="{% static 'jquery-ui/jquery-ui/jquery-ui.min.css' %}">
+
 {% endblock %}
 
 {% block content %}
@@ -31,18 +32,17 @@
 
     <br>
 
-    <section class="cd-timeline js-cd-timeline">
+    <section class="">
         <div class="cd-timeline__container">
-            <!-- LISTAGEM DE ARQUIVOS EM TIMELINE -->
             {% for submission in submissions|dictsort:"submission_date" %}
-                <div class="cd-timeline__block js-cd-block">
-                    <div class="cd-timeline__content js-cd-content"  data-toggle="" data-target="#{{submission.id}}">
-                        <form id="formSub" method="POST" enctype="multipart/form-data">
+            <div class="cd-timeline__block js-cd-block">
+                <div class="cd-timeline__content js-cd-content">
+                    <form id="formSub" method="POST" enctype="multipart/form-data">
                             {% csrf_token %}
                             <!-- Subject -->
                             <h2 class="editable-subject">{{submission.subject.name}}</h2>
 
-                            <input id="id_subject" type="text" name="submission_subject" value="{{submission.subject.id}}">
+                            <input hidden id="id_subject" type="text" name="submission_subject" value="{{submission.subject.id}}">
 
                             <br>
 
@@ -52,7 +52,7 @@
                             <!-- Topic -->
                             <h3 id="{{submission.id}}" class="editable-topic"> {{submission.topic}}</h3>
 
-                            <input id="id_topic{{submission.id}}" type="text" name="submission_topic" value=" {{submission.topic}}">
+                            <input hidden id="id_topic{{submission.id}}" type="text" name="submission_topic" value=" {{submission.topic}}">
                             
                             <div class="" id="{{submission.id}}">
                                 <!-- Description -->
@@ -68,7 +68,7 @@
                                 
                                 {% endfor %}
 
-                            <input id="id_date{{submission_id}}" type="date" name="submission_date" value="{{ submission.submission_date|date:'Y-m-d' }}">
+                            <input hidden id="id_date{{submission_id}}" type="date" name="submission_date" value="{{ submission.submission_date|date:'Y-m-d' }}">
 
 
                             <input type="submit" name=btn_aceitar class="btn btn-success" value="Aceitar">
@@ -77,8 +77,9 @@
 
                         <!-- <a href="#0" class="cd-timeline__read-more">Read more</a> -->
                         <span id="{{submission.id}}" class="cd-timeline__date editable-date">{{submission.submission_date}}</span>
-                    </div> <!-- cd-timeline__content -->
-                </div> <!-- cd-timeline__block -->
+                </div> <!-- cd-timeline__content -->
+            </div> <!-- cd-timeline__block -->
+        
             {% endfor %}
         </div>
     </section>

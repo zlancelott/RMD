@@ -136,13 +136,14 @@ def evaluate_submissions(request):
     
     submissions = (user_logged_in.submissions.filter(subject = moderador.subject)).filter(approved=False)
 
-    print (submissions[0].submission_date)
+    print (request.POST)
 
     if request.method == "POST":
         form = UpdateSubForm(request.POST or None, request.FILES or None)
+        submission = get_object_or_404(Submission, id=request.POST['submission_id'])
 
-        if request.POST['btn_aceitar']:
-            submission = get_object_or_404(Submission, id=request.POST['submission_id'])
+
+        if "btn_aceitar" in request.POST:
             # Salvando Submissão
             submission.subject = get_object_or_404(Subject, id=request.POST['submission_subject'])
             submission.submission_date = request.POST['submission_date']
@@ -153,12 +154,10 @@ def evaluate_submissions(request):
             
             submission.save()
 
-            return redirect('home')
 
         # Se rejeitar a submissão ele deleta o arquivo
-        if request.POST['btn_rejeitar']:
-            submission.delete()
-            return redirect('home')            
+        if 'btn_rejeitar' in request.POST:
+            submission.delete()   
 
         print (request.POST)
 
